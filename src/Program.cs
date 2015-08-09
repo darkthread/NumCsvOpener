@@ -73,6 +73,7 @@ namespace NumCsvOpener
                         StringBuilder sb = new StringBuilder();
                         bool quotMarkMode = false;
                         string newLineReplacement = "\x07";
+                        string commaReplacement = "\x08";
                         //支援CSV雙引號內含換行符號規則，採逐字讀入解析
                         //雙引號內如需表示", 使用""代替
                         while (sr.Peek() >= 0)
@@ -85,26 +86,24 @@ namespace NumCsvOpener
                                 {
                                     //連續兩個雙引號，為欄位內雙引號字元
                                     if (sr.Peek() == '"')
-                                    {
-                                        sb.Append(sr.Read());
-                                    }
+                                        sb.Append((char)sr.Read());
                                     //遇到結尾雙引號，雙引號包夾模式結束
                                     else
-                                    {
                                         quotMarkMode = false;
-                                    }
                                     sb.Append(ch);
                                 }
-                                //雙引號內遇到換行符號，先置換成特殊號，稍後換回
+                                //雙引號內遇到換行符號，先置換成特殊字元，稍後換回
                                 else if (ch == '\r' && sr.Peek() == '\n')
                                 {
                                     sr.Read();
                                     sb.Append(newLineReplacement);
                                 }
-                                else
-                                {
+                                //雙引號內遇到逗號，先置換成特殊字元，稍後換回
+                                else if (ch == ',')
+                                    sb.Append(commaReplacement);
+                                //否則，正常插入字元
+                                else 
                                     sb.Append(ch);
-                                }
                             }
                             else
                             {
@@ -125,10 +124,10 @@ namespace NumCsvOpener
                                     p.Select(o => 
                                         o.StartsWith("0") ? 
                                             string.Format("=\"{0}\"", o) : 
-                                            //還原換行符號
+                                            //還原換行符號及逗號
                                             o.StartsWith("\"") ? 
-                                                o.Replace(newLineReplacement, "\r\n") : 
-                                                o
+                                                o.Replace(newLineReplacement, "\r\n")
+                                                .Replace(commaReplacement, ",") : o
                                     ).ToArray()));
                             }
                         }
