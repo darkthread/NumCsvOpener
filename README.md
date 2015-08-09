@@ -7,5 +7,8 @@
 這是一支.NET Windows Form小工具，讓使用者放在桌面上，當需要開啟這類含左補零數字CSV時，不要直接點選CSV開Excel，而是透過小工具選取檔案，小工具會讀取CSV內容，將所有欄位內容重新包裝成="…"格式，全部當成字串，再另存成*.fixed.csv(修正版)，最後啟動Excel開啟修正後的CSV，避開左補零被截除的問題。
 
 
-[完整介紹](http://blog.darkthread.net/post-2012-04-12-keep-csv-leading-zeros-in-excel.aspx) 
+[概念介紹](http://blog.darkthread.net/post-2012-04-12-keep-csv-leading-zeros-in-excel.aspx) 
 
+2015-08-09 加入語系編號選擇及欄位內換行支援
+
+[強化版介紹](http://blog.darkthread.net/post-2015-08-09-numcsvopener-support-mutiline.aspx)
